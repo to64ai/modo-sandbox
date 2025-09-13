@@ -1,0 +1,41 @@
+name: Development and Main Branch Workflow
+
+# This workflow now triggers on pushes to EITHER development or main
+on:
+  push:
+    branches: [ "development", "main" ]
+
+jobs:
+  # This job will ONLY run for the 'development' branch
+  test-on-development:
+    # The 'if' condition is the key here!
+    if: github.ref == 'refs/heads/development'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🧪 Starting Test
+        run: echo "Running tests on the development branch..."
+
+      #- name: Configure AWS Credentials
+      #  uses: aws-actions/configure-aws-credentials@v4
+      #  with:
+      #   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #    aws-region: us-east-1
+
+      #- name: Verify AWS Connection
+      #  run: aws sts get-caller-identity
+
+      - name: ✨ Test Complete
+        run: echo "Successfully connected to AWS. Test passed!"
+
+  # This job will ONLY run for the 'main' branch
+  deploy-to-production:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚀 Starting Deployment
+        run: echo "Code has been merged to main. Deploying to production..."
+      # In a real project, you would add your deployment steps here
+      # For example, deploying a website or updating a server.
+      - name: ✨ Deployment Complete
+        run: echo "Successfully deployed to production!"
